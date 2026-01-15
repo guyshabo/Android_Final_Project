@@ -7,6 +7,10 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+
+import com.google.firebase.firestore.FirebaseFirestore;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -58,7 +62,26 @@ public class Fragment_Add_Recipe extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment__add__recipe, container, false);
+
+        View view = inflater.inflate(R.layout.fragment__add__recipe, container, false);
+
+        Button Save = view.findViewById(R.id.Save);
+        EditText RecipeName = view.findViewById(R.id.RecipeName);
+        EditText Instructions = view.findViewById(R.id.Instructions);
+
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+        Save.setOnClickListener(v -> {
+
+            String title = RecipeName.getText().toString();
+            String instructions = Instructions.getText().toString();
+
+            Recipe recipe = new Recipe(title, instructions, false);
+
+            db.collection("recipes").add(recipe);
+        });
+
+        return view;
     }
+
 }

@@ -1,14 +1,74 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".Fragment_Home_Page">
 
     <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
 
-</FrameLayout>
+    <TextView
+        android:id="@+id/WelcomeToCookit"
+        android:layout_width="match_parent"
+        android:layout_height="168dp"
+        android:layout_weight="1"
+        android:text="Welcome To Cookit"
+        android:visibility="visible" />
+
+    <ImageView
+        android:id="@+id/imageView3"
+        android:layout_width="448dp"
+        android:layout_height="439dp"
+        android:layout_weight="0.1"
+        android:src="@drawable/whatsapp_image_2026_01_06_at_18_20_17"
+        android:visibility="visible" />
+
+    <LinearLayout
+        android:layout_width="472dp"
+        android:layout_height="191dp"
+        android:layout_weight="1"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/SearchRecipe"
+            android:layout_width="match_parent"
+            android:layout_height="139dp"
+            android:layout_weight="1"
+            android:text="SearchRecipe"
+            android:visibility="visible" />
+
+        <Button
+            android:id="@+id/RecipeList"
+            android:layout_width="match_parent"
+            android:layout_height="139dp"
+            android:layout_weight="1"
+            android:text="RecipeList"
+            android:visibility="visible" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="527dp"
+        android:layout_weight="1"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/Favorites"
+            android:layout_width="237dp"
+            android:layout_height="139dp"
+            android:layout_weight="1"
+            android:text="Favorites"
+            android:visibility="visible" />
+
+        <Button
+            android:id="@+id/AddRecipe"
+            android:layout_width="237dp"
+            android:layout_height="139dp"
+            android:layout_weight="1"
+            android:text="AddRecipe"
+            android:visibility="visible" />
+    </LinearLayout>
+
+</LinearLayout>
