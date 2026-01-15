@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/Register"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/background_image"
     android:orientation="vertical"
     tools:context=".Fragment_Register">
 
@@ -69,10 +71,13 @@
         android:orientation="horizontal">
 
         <Button
-            android:id="@+id/Register2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:backgroundTint="#C592A9"
+            android:fontFamily="@font/aclonica"
+            android:insetLeft="50dp"
+            android:insetRight="50dp"
             android:text="Register" />
     </LinearLayout>
 

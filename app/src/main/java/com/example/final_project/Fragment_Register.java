@@ -1,5 +1,6 @@
 package com.example.final_project;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -69,7 +70,7 @@ public class Fragment_Register extends Fragment {
                 Navigation.findNavController(view).navigate(R.id.action_fragment_Register_to_fragment_Main_Page);
             }
         });
-        Button Register2 = view.findViewById(R.id.Register2);
+        @SuppressLint("MissingInflatedId") Button Register2 = view.findViewById(R.id.Register);
         Register2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
