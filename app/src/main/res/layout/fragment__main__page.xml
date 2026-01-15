@@ -14,7 +14,7 @@
         android:layout_weight="1"
         android:src="@drawable/whatsapp_image_2026_01_06_at_18_20_17" />
 
-    <TextView
+    <EditText
         android:id="@+id/CookIt"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

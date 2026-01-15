@@ -10,6 +10,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import com.google.firebase.firestore.FirebaseFirestore;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Arrays;
+
+
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link fragment_Main_Page#newInstance} factory method to

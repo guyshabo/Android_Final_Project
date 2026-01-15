@@ -23,37 +23,42 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="156dp"
+        android:layout_height="344dp"
         android:orientation="vertical">
 
-        <TextView
+        <EditText
             android:id="@+id/FullName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:text="FullName" />
 
-        <TextView
+        <EditText
             android:id="@+id/UserName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:text="UserName" />
 
-        <TextView
+        <EditText
             android:id="@+id/Email"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:text="Email" />
 
-        <TextView
+        <EditText
             android:id="@+id/PhoneNumber"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:text="PhoneNumber" />
 
-        <TextView
+        <EditText
             android:id="@+id/Password2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:text="Password" />
 
     </LinearLayout>

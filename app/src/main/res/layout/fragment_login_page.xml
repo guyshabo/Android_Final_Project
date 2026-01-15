@@ -28,14 +28,14 @@
         android:layout_weight="1"
         android:orientation="vertical">
 
-        <TextView
+        <EditText
             android:id="@+id/username"
             android:layout_width="wrap_content"
             android:layout_height="109dp"
             android:layout_weight="1"
             android:text="username" />
 
-        <TextView
+        <EditText
             android:id="@+id/password"
             android:layout_width="wrap_content"
             android:layout_height="107dp"
