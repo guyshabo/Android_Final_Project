@@ -6,25 +6,16 @@
     app:startDestination="@id/fragment_Main_Page">
 
     <fragment
-        android:id="@+id/fragment_login_page2"
-        android:name="com.example.final_project.fragment_Login_Page"
-        android:label="fragment_login_page"
-        tools:layout="@layout/fragment_login_page" >
-        <action
-            android:id="@+id/action_fragment_login_page2_to_fragment_Home_Page"
-            app:destination="@id/fragment_Home_Page" />
-    </fragment>
-    <fragment
         android:id="@+id/fragment_Main_Page"
         android:name="com.example.final_project.fragment_Main_Page"
         android:label="fragment__main__page"
         tools:layout="@layout/fragment__main__page" >
         <action
-            android:id="@+id/action_fragment_Main_Page_to_fragment_login_page2"
-            app:destination="@id/fragment_login_page2" />
-        <action
             android:id="@+id/action_fragment_Main_Page_to_fragment_Register"
             app:destination="@id/fragment_Register" />
+        <action
+            android:id="@+id/action_fragment_Main_Page_to_fragment_Login_Page"
+            app:destination="@id/fragment_Login_Page" />
     </fragment>
     <fragment
         android:id="@+id/fragment_Register"
@@ -32,8 +23,8 @@
         android:label="fragment__register"
         tools:layout="@layout/fragment__register" >
         <action
-            android:id="@+id/action_fragment_Register_to_fragment_login_page2"
-            app:destination="@id/fragment_login_page2" />
+            android:id="@+id/action_fragment_Register_to_fragment_Main_Page"
+            app:destination="@id/fragment_Main_Page" />
     </fragment>
     <fragment
         android:id="@+id/fragment_Add_Recipe"
@@ -95,5 +86,17 @@
         <action
             android:id="@+id/action_fragment_Recipe_List_to_fragment_Recipe_Details"
             app:destination="@id/fragment_Recipe_Details" />
+    </fragment>
+    <fragment
+        android:id="@+id/fragment_Login_Page"
+        android:name="com.example.final_project.fragment_Login_Page"
+        android:label="fragment_login_page"
+        tools:layout="@layout/fragment_login_page" >
+        <action
+            android:id="@+id/action_fragment_Login_Page_to_fragment_Home_Page"
+            app:destination="@id/fragment_Home_Page" />
+        <action
+            android:id="@+id/action_fragment_Login_Page_to_fragment_Main_Page"
+            app:destination="@id/fragment_Main_Page" />
     </fragment>
 </navigation>

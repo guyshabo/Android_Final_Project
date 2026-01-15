@@ -3,10 +3,12 @@ package com.example.final_project;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -58,7 +60,41 @@ public class Fragment_Home_Page extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment__home__page, container, false);
+
+        View view = inflater.inflate(R.layout.fragment__home__page, container, false);
+
+        Button SearchRecipe = view.findViewById(R.id.SearchRecipe);
+        SearchRecipe.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Navigation.findNavController(view).navigate(R.id.action_fragment_Home_Page_to_fragment_Search);
+            }
+        });
+
+        Button RecipeList = view.findViewById(R.id.RecipeList);
+        RecipeList.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Navigation.findNavController(view).navigate(R.id.action_fragment_Home_Page_to_fragment_Recipe_List);
+            }
+        });
+
+        Button Favorites = view.findViewById(R.id.Favorites);
+        Favorites.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Navigation.findNavController(view).navigate(R.id.action_fragment_Home_Page_to_fragment_Favorites);
+            }
+        });
+
+        Button AddRecipe = view.findViewById(R.id.AddRecipe);
+        AddRecipe.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Navigation.findNavController(view).navigate(R.id.action_fragment_Home_Page_to_fragment_Add_Recipe);
+            }
+        });
+        return view;
+
     }
 }
