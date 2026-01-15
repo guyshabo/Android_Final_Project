@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/navgraph"
+    app:startDestination="@id/fragment_Main_Page">
+
+    <fragment
+        android:id="@+id/fragment_login_page2"
+        android:name="com.example.final_project.fragment_Login_Page"
+        android:label="fragment_login_page"
+        tools:layout="@layout/fragment_login_page" >
+        <action
+            android:id="@+id/action_fragment_login_page2_to_fragment_Home_Page"
+            app:destination="@id/fragment_Home_Page" />
+    </fragment>
+    <fragment
+        android:id="@+id/fragment_Main_Page"
+        android:name="com.example.final_project.fragment_Main_Page"
+        android:label="fragment__main__page"
+        tools:layout="@layout/fragment__main__page" >
+        <action
+            android:id="@+id/action_fragment_Main_Page_to_fragment_login_page2"
+            app:destination="@id/fragment_login_page2" />
+        <action
+            android:id="@+id/action_fragment_Main_Page_to_fragment_Register"
+            app:destination="@id/fragment_Register" />
+    </fragment>
+    <fragment
+        android:id="@+id/fragment_Register"
+        android:name="com.example.final_project.Fragment_Register"
+        android:label="fragment__register"
+        tools:layout="@layout/fragment__register" >
+        <action
+            android:id="@+id/action_fragment_Register_to_fragment_login_page2"
+            app:destination="@id/fragment_login_page2" />
+    </fragment>
+    <fragment
+        android:id="@+id/fragment_Add_Recipe"
+        android:name="com.example.final_project.Fragment_Add_Recipe"
+        android:label="fragment__add__recipe"
+        tools:layout="@layout/fragment__add__recipe" >
+        <action
+            android:id="@+id/action_fragment_Add_Recipe_to_fragment_Favorites"
+            app:destination="@id/fragment_Favorites" />
+        <action
+            android:id="@+id/action_fragment_Add_Recipe_to_fragment_Recipe_Details"
+            app:destination="@id/fragment_Recipe_Details" />
+    </fragment>
+    <fragment
+        android:id="@+id/fragment_Favorites"
+        android:name="com.example.final_project.Fragment_Favorites"
+        android:label="fragment__favorites"
+        tools:layout="@layout/fragment__favorites" >
+        <action
+            android:id="@+id/action_fragment_Favorites_to_fragment_Recipe_Details"
+            app:destination="@id/fragment_Recipe_Details" />
+    </fragment>
+    <fragment
+        android:id="@+id/fragment_Home_Page"
+        android:name="com.example.final_project.Fragment_Home_Page"
+        android:label="fragment__home__page"
+        tools:layout="@layout/fragment__home__page" >
+        <action
+            android:id="@+id/action_fragment_Home_Page_to_fragment_Favorites"
+            app:destination="@id/fragment_Favorites" />
+        <action
+            android:id="@+id/action_fragment_Home_Page_to_fragment_Add_Recipe"
+            app:destination="@id/fragment_Add_Recipe" />
+        <action
+            android:id="@+id/action_fragment_Home_Page_to_fragment_Search"
+            app:destination="@id/fragment_Search" />
+        <action
+            android:id="@+id/action_fragment_Home_Page_to_fragment_Recipe_Details"
+            app:destination="@id/fragment_Recipe_Details" />
+        <action
+            android:id="@+id/action_fragment_Home_Page_to_fragment_Recipe_List"
+            app:destination="@id/fragment_Recipe_List" />
+    </fragment>
+    <fragment
+        android:id="@+id/fragment_Search"
+        android:name="com.example.final_project.Fragment_Search"
+        android:label="fragment__search"
+        tools:layout="@layout/fragment__search" />
+    <fragment
+        android:id="@+id/fragment_Recipe_Details"
+        android:name="com.example.final_project.Fragment_Recipe_Details"
+        android:label="fragment__recipe__details"
+        tools:layout="@layout/fragment__recipe__details" />
+    <fragment
+        android:id="@+id/fragment_Recipe_List"
+        android:name="com.example.final_project.Fragment_Recipe_List"
+        android:label="fragment__recipe__list"
+        tools:layout="@layout/fragment__recipe__list" >
+        <action
+            android:id="@+id/action_fragment_Recipe_List_to_fragment_Recipe_Details"
+            app:destination="@id/fragment_Recipe_Details" />
+    </fragment>
+</navigation>
