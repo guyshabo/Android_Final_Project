@@ -13,7 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="316dp"
         android:layout_weight="1"
-        android:src="@drawable/whatsapp_image_2026_01_06_at_18_20_17" />
+        android:src="@drawable/whatsapp_image_2026_01_18_at_11_13_57" />
 
     <EditText
         android:id="@+id/CookIt"
