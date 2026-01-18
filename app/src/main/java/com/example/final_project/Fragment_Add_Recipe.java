@@ -1,7 +1,11 @@
 package com.example.final_project;
 
+import android.app.Activity;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
@@ -9,55 +13,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.google.firebase.firestore.FirebaseFirestore;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link Fragment_Add_Recipe#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class Fragment_Add_Recipe extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    private static final int PICK_IMAGE_REQUEST = 1;
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
-    public Fragment_Add_Recipe() {
-        // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment Fragment_Add_Recipe.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static Fragment_Add_Recipe newInstance(String param1, String param2) {
-        Fragment_Add_Recipe fragment = new Fragment_Add_Recipe();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-    }
+    private Uri imageUri;
+    private ImageView imagePreview;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -65,23 +31,62 @@ public class Fragment_Add_Recipe extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment__add__recipe, container, false);
 
-        Button Save = view.findViewById(R.id.Save);
-        EditText RecipeName = view.findViewById(R.id.RecipeName);
-        EditText Instructions = view.findViewById(R.id.Instructions);
+        EditText etName = view.findViewById(R.id.etRecipeName);
+        EditText etInstructions = view.findViewById(R.id.etInstructions);
+        Button btnSave = view.findViewById(R.id.btnSave);
+        Button btnChooseImage = view.findViewById(R.id.btnChooseImage);
+        imagePreview = view.findViewById(R.id.imagePreview);
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-        Save.setOnClickListener(v -> {
+        // בחירת תמונה
+        btnChooseImage.setOnClickListener(v -> {
+            Intent intent = new Intent(Intent.ACTION_PICK);
+            intent.setType("image/*");
+            startActivityForResult(intent, PICK_IMAGE_REQUEST);
+        });
 
-            String title = RecipeName.getText().toString();
-            String instructions = Instructions.getText().toString();
+        // שמירה
+        btnSave.setOnClickListener(v -> {
 
-            Recipe recipe = new Recipe(title, instructions, false);
+            String name = etName.getText().toString().trim();
+            String instructions = etInstructions.getText().toString().trim();
 
-            db.collection("recipes").add(recipe);
+            if (name.isEmpty()) {
+                Toast.makeText(getContext(), "חובה להזין שם מתכון", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            Recipe recipe;
+
+            if (imageUri != null) {
+                // בשלב הזה שומרים רק URI (בהמשך נעלה ל‑Firebase Storage)
+                recipe = new Recipe(name, imageUri.toString());
+            } else {
+                recipe = new Recipe(name, instructions, false);
+            }
+
+            db.collection("recipes")
+                    .add(recipe)
+                    .addOnSuccessListener(doc ->
+                            Toast.makeText(getContext(), "המתכון נשמר", Toast.LENGTH_SHORT).show()
+                    );
         });
 
         return view;
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == PICK_IMAGE_REQUEST &&
+                resultCode == Activity.RESULT_OK &&
+                data != null) {
+
+            imageUri = data.getData();
+            imagePreview.setImageURI(imageUri);
+            imagePreview.setVisibility(View.VISIBLE);
+        }
+    }
 }

@@ -1,52 +1,34 @@
 package com.example.final_project;
 
 public class Recipe {
-    private String id;
-    private String title;
+
+    private String name;
     private String instructions;
-    private boolean isFavorite;
+    private String imageUrl; // null אם אין תמונה
+    private boolean favorite;
 
-    // חובה ל-Firebase (קונסטרקטור ריק)
-    public Recipe() {
-    }
+    // חובה ל‑Firebase
+    public Recipe() {}
 
-    // קונסטרקטור רגיל
-    public Recipe(String title, String instructions, boolean isFavorite) {
-        this.title = title;
+    // מתכון רגיל (טקסט)
+    public Recipe(String name, String instructions, boolean favorite) {
+        this.name = name;
         this.instructions = instructions;
-        this.isFavorite = isFavorite;
+        this.favorite = favorite;
+        this.imageUrl = null;
     }
 
-    // Getters ו-Setters
-    public String getId() {
-        return id;
+    // מתכון מתמונה
+    public Recipe(String name, String imageUrl) {
+        this.name = name;
+        this.imageUrl = imageUrl;
+        this.instructions = "";
+        this.favorite = false;
     }
 
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public String getInstructions() {
-        return instructions;
-    }
-
-    public void setInstructions(String instructions) {
-        this.instructions = instructions;
-    }
-
-    public boolean isFavorite() {
-        return isFavorite;
-    }
-
-    public void setFavorite(boolean favorite) {
-        isFavorite = favorite;
-    }
+    // getters & setters
+    public String getName() { return name; }
+    public String getInstructions() { return instructions; }
+    public String getImageUrl() { return imageUrl; }
+    public boolean isFavorite() { return favorite; }
 }

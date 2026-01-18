@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/background_image"
@@ -18,83 +16,125 @@
 
     <ImageView
         android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:scaleType="fitCenter"
-        android:src="@drawable/whatsapp_image_2026_01_06_at_18_20_17" />
+        android:layout_height="223dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/whatsapp_image_2026_01_18_at_11_17_26" />
+
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
+        android:gravity="center"
         android:orientation="horizontal">
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/SearchRecipe"
+        <LinearLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:backgroundTint="@android:color/transparent"
-            android:padding="8dp"
-            android:text="Search"
-            android:textColor="#C592A9"
-            app:icon="@drawable/search_image"
-            app:iconGravity="top"
-            app:iconSize="96dp"
-            app:iconTint="#C592A9"
-            app:strokeWidth="0dp" />
+            android:gravity="center"
+            android:orientation="vertical">
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/RecipeList"
+            <ImageView
+                android:layout_width="160dp"
+                android:layout_height="160dp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/search_image"
+                android:background="@drawable/rounded_image_bg"
+                android:clipToOutline="true"/>
+
+            <Button
+                android:id="@+id/SearchRecipe"
+                android:layout_width="130dp"
+                android:layout_height="48dp"
+                android:backgroundTint="#C592A9"
+                android:fontFamily="@font/aclonica"
+                android:text="Search"
+                android:textColor="@android:color/white" />
+        </LinearLayout>
+
+        <LinearLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:backgroundTint="@android:color/transparent"
-            android:padding="8dp"
-            android:text="Recipes"
-            android:textColor="#C592A9"
-            app:icon="@drawable/list_r_image"
-            app:iconGravity="top"
-            app:iconPadding="8dp"
-            app:iconSize="96dp"
-            app:iconTint="#C592A9"
-            app:strokeWidth="0dp" />
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="160dp"
+                android:layout_height="160dp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/list_r_image"
+                android:background="@drawable/rounded_image_bg"
+                android:clipToOutline="true"/>
+
+            <Button
+                android:id="@+id/RecipeList"
+                android:layout_width="130dp"
+                android:layout_height="48dp"
+                android:backgroundTint="#C592A9"
+                android:fontFamily="@font/aclonica"
+                android:text="Recipes"
+                android:textColor="@android:color/white" />
+        </LinearLayout>
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
+        android:gravity="center"
         android:orientation="horizontal">
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/Favorites"
+        <LinearLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:backgroundTint="@android:color/transparent"
-            android:padding="8dp"
-            android:text="Favorites"
-            android:textColor="#C592A9"
-            app:icon="@drawable/favorite_image"
-            app:iconGravity="top"
-            app:iconSize="96dp"
-            app:iconTint="#C592A9"
-            app:strokeWidth="0dp" />
+            android:gravity="center"
+            android:orientation="vertical">
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/AddRecipe"
+            <ImageView
+                android:layout_width="160dp"
+                android:layout_height="160dp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/favorite_image"
+                android:background="@drawable/rounded_image_bg"
+                android:clipToOutline="true"/>
+
+            <Button
+                android:id="@+id/Favorites"
+                android:layout_width="130dp"
+                android:layout_height="48dp"
+                android:backgroundTint="#C592A9"
+                android:fontFamily="@font/aclonica"
+                android:text="Favorites"
+                android:textColor="@android:color/white" />
+        </LinearLayout>
+
+        <LinearLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:backgroundTint="@android:color/transparent"
-            android:padding="8dp"
-            android:text="Add"
-            android:textColor="#C592A9"
-            app:icon="@drawable/add_image"
-            app:iconGravity="top"
-            app:iconSize="96dp"
-            app:iconTint="#C592A9"
-            app:strokeWidth="0dp" />
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="160dp"
+                android:layout_height="160dp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/add_image"
+                android:background="@drawable/rounded_image_bg"
+                android:clipToOutline="true"/>
+
+            <Button
+                android:id="@+id/AddRecipe"
+                android:layout_width="130dp"
+                android:layout_height="48dp"
+                android:backgroundTint="#C592A9"
+                android:fontFamily="@font/aclonica"
+                android:text="Add"
+                android:textColor="@android:color/white" />
+        </LinearLayout>
     </LinearLayout>
 
 </LinearLayout>
