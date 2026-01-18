@@ -24,6 +24,10 @@
         android:id="@+id/Save"
         android:layout_width="match_parent"
         android:layout_height="98dp"
-        android:text="Save" />
+        android:backgroundTint="#C592A9"
+        android:focusableInTouchMode="false"
+        android:fontFamily="@font/aclonica"
+        android:text="Save"
+        android:textSize="20sp" />
 
 </LinearLayout>
