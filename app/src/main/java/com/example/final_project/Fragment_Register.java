@@ -72,21 +72,21 @@ public class Fragment_Register extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment__register, container, false);
-        Button BackButton2 = view.findViewById(R.id.BackButton2);
-        BackButton2.setOnClickListener(new View.OnClickListener() {
+
+        Button BackButton = view.findViewById(R.id.BackButton2);
+        BackButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Navigation.findNavController(view).navigate(R.id.action_fragment_Register_to_fragment_Main_Page);
-
+            }
         });
-        @SuppressLint("MissingInflatedId") Button Register2 = view.findViewById(R.id.Register);
-        Register2.setOnClickListener(new View.OnClickListener() {
+        Button Register  = view.findViewById(R.id.Register);
+        Register.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Navigation.findNavController(view).navigate(R.id.action_fragment_Register_to_fragment_Main_Page);
-                }
+            }
         });
-
         return view;
     }
 }

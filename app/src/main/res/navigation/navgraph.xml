@@ -37,6 +37,9 @@
         <action
             android:id="@+id/action_fragment_Add_Recipe_to_fragment_Recipe_Details"
             app:destination="@id/fragment_Recipe_Details" />
+        <action
+            android:id="@+id/action_fragment_Add_Recipe_to_fragment_Home_Page"
+            app:destination="@id/fragment_Home_Page" />
     </fragment>
     <fragment
         android:id="@+id/fragment_Favorites"

@@ -7,6 +7,7 @@ import android.os.Bundle;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -32,11 +33,17 @@ public class Fragment_Add_Recipe extends Fragment {
         View view = inflater.inflate(R.layout.fragment__add__recipe, container, false);
 
         EditText etName = view.findViewById(R.id.etRecipeName);
+        Button BackButton = view.findViewById(R.id.BackButton3);
         EditText etInstructions = view.findViewById(R.id.etInstructions);
         Button btnSave = view.findViewById(R.id.btnSave);
         Button btnChooseImage = view.findViewById(R.id.btnChooseImage);
         imagePreview = view.findViewById(R.id.imagePreview);
-
+        BackButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Navigation.findNavController(view).navigate(R.id.action_fragment_Add_Recipe_to_fragment_Home_Page);
+            }
+        });
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
         // בחירת תמונה
