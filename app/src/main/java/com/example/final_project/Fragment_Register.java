@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -78,15 +79,26 @@ public class Fragment_Register extends Fragment {
             @Override
             public void onClick(View view) {
                 Navigation.findNavController(view).navigate(R.id.action_fragment_Register_to_fragment_Main_Page);
+
             }
         });
-        Button Register  = view.findViewById(R.id.Register);
+        Button Register = view.findViewById(R.id.btnRegister);
+
         Register.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Navigation.findNavController(view).navigate(R.id.action_fragment_Register_to_fragment_Main_Page);
+
+                EditText emailEt = view.getRootView().findViewById(R.id.Email);
+                EditText passEt = view.getRootView().findViewById(R.id.Password2);
+
+                String email = emailEt.getText().toString();
+                String password = passEt.getText().toString();
+
+                MainActivity mainActivity = (MainActivity) getActivity();
+                mainActivity.register(email, password);
             }
         });
+
         return view;
     }
 }

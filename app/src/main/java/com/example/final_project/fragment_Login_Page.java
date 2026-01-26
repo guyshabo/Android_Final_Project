@@ -68,13 +68,16 @@ public class fragment_Login_Page extends Fragment {
             @Override
             public void onClick(View view) {
                 Navigation.findNavController(view).navigate(R.id.action_fragment_Login_Page_to_fragment_Main_Page);
+
             }
         });
         Button Login2 = view.findViewById(R.id.Login2);
         Login2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Navigation.findNavController(view).navigate(R.id.action_fragment_Login_Page_to_fragment_Home_Page);
+                MainActivity mainActivity = (MainActivity) getActivity();
+                mainActivity.login();
+
                 }
         });
         return view;
