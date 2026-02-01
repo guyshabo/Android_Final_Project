@@ -7,7 +7,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.*;
+
 import com.google.firebase.database.*;
+
 import java.util.ArrayList;
 
 public class Fragment_Search extends Fragment {
@@ -18,7 +20,9 @@ public class Fragment_Search extends Fragment {
     ArrayAdapter<String> adapter;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+
         View view = inflater.inflate(R.layout.fragment__search, container, false);
 
         etSearch = view.findViewById(R.id.etSearch);
@@ -27,7 +31,8 @@ public class Fragment_Search extends Fragment {
         ImageView imgBack = view.findViewById(R.id.imgBack);
 
         results = new ArrayList<>();
-        adapter = new ArrayAdapter<>(requireContext(), android.R.layout.simple_list_item_1, results);
+        adapter = new ArrayAdapter<>(requireContext(),
+                android.R.layout.simple_list_item_1, results);
         listView.setAdapter(adapter);
 
         btnSearch.setOnClickListener(v -> searchRecipe());
@@ -42,8 +47,7 @@ public class Fragment_Search extends Fragment {
 
         imgBack.setOnClickListener(v ->
                 Navigation.findNavController(v)
-                        .navigate(R.id.action_fragment_Search_to_fragment_Home_Page)
-        );
+                        .navigate(R.id.action_fragment_Search_to_fragment_Home_Page));
 
         return view;
     }
@@ -55,14 +59,19 @@ public class Fragment_Search extends Fragment {
         FirebaseDatabase.getInstance()
                 .getReference("recipes")
                 .addListenerForSingleValueEvent(new ValueEventListener() {
+
                     @Override
                     public void onDataChange(DataSnapshot snapshot) {
                         for (DataSnapshot s : snapshot.getChildren()) {
                             Recipe r = s.getValue(Recipe.class);
-                            if (r != null && r.getName() != null) {
-                                String ingredients = r.ingredients == null ? "" : r.ingredients;
-                                if (r.getName().contains(text) || ingredients.contains(text)) {
-                                    results.add(r.getName());
+
+                            if (r != null && r.name != null) {
+                                String ingredients =
+                                        r.ingredients == null ? "" : r.ingredients;
+
+                                if (r.name.contains(text)
+                                        || ingredients.contains(text)) {
+                                    results.add(r.name);
                                 }
                             }
                         }

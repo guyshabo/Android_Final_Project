@@ -54,7 +54,7 @@ public class Fragment_Add_Recipe extends Fragment {
             String instructions = etInstructions.getText().toString();
 
             if (name.isEmpty() || ingredients.isEmpty()) {
-                Toast.makeText(getContext(), "חובה להזין שם ומצרכים", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Name And Ingredients Are Required.", Toast.LENGTH_SHORT).show();
                 return;
             }
 
