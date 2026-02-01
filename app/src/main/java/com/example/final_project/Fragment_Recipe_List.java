@@ -7,12 +7,9 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
-
 import androidx.fragment.app.Fragment;
-import androidx.navigation.Navigation;
-
+import androidx.navigation.fragment.NavHostFragment;
 import com.google.firebase.firestore.FirebaseFirestore;
-
 import java.util.ArrayList;
 
 public class Fragment_Recipe_List extends Fragment {
@@ -32,19 +29,19 @@ public class Fragment_Recipe_List extends Fragment {
         listView.setAdapter(adapter);
 
         imgBack2.setOnClickListener(v ->
-                Navigation.findNavController(v)
+                NavHostFragment.findNavController(this)
                         .navigate(R.id.action_fragment_Recipe_List_to_fragment_Home_Page)
         );
 
         FirebaseFirestore.getInstance()
                 .collection("recipes")
                 .get()
-                .addOnSuccessListener(queryDocumentSnapshots -> {
+                .addOnSuccessListener(snapshot -> {
                     recipes.clear();
                     recipeNames.clear();
-                    for (var doc : queryDocumentSnapshots.getDocuments()) {
+                    for (var doc : snapshot.getDocuments()) {
                         Recipe recipe = doc.toObject(Recipe.class);
-                        if (recipe != null) {
+                        if (recipe != null && recipe.getName() != null) {
                             recipes.add(recipe);
                             recipeNames.add(recipe.getName());
                         }
@@ -59,7 +56,7 @@ public class Fragment_Recipe_List extends Fragment {
             bundle.putString("ingredients", recipe.getIngredients());
             bundle.putString("instructions", recipe.getInstructions());
             bundle.putString("imageUrl", recipe.getImageUrl());
-            Navigation.findNavController(v)
+            NavHostFragment.findNavController(this)
                     .navigate(R.id.action_fragment_Recipe_List_to_fragment_Recipe_Details, bundle);
         });
 

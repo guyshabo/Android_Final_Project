@@ -69,7 +69,7 @@ public class Fragment_Add_Recipe extends Fragment {
             recipe.id = id;
             recipesRef.child(id).setValue(recipe);
 
-            Toast.makeText(getContext(), "המתכון נשמר", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), "Recipe Saved", Toast.LENGTH_SHORT).show();
         });
 
         return view;
