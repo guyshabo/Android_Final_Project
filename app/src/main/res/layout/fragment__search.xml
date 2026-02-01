@@ -6,21 +6,31 @@
     android:background="@drawable/background_image"
     android:padding="16dp">
 
-    <ImageView
+    <ImageButton
         android:id="@+id/imgBack"
-        android:layout_width="32dp"
-        android:layout_height="32dp"
-        android:layout_margin="16dp"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="16dp"
+        android:layout_gravity="end"
+        android:background="?attr/selectableItemBackgroundBorderless"
         android:src="@drawable/ic_back"
-        android:contentDescription="Back"
-        android:clickable="true"
-        android:focusable="true" />
+        android:contentDescription="Back to home"
+        android:scaleType="centerInside"/>
 
     <EditText
         android:id="@+id/etSearch"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Search recipe or ingredient" />
+        android:layout_height="56dp"
+        android:layout_margin="16dp"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:hint="Search recipe or ingredient"
+        android:textSize="18sp"
+        android:minHeight="48dp"
+        android:importantForAccessibility="yes" />
+
+
 
     <Button
         android:id="@+id/btnSearch"

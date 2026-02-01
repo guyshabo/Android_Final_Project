@@ -5,15 +5,17 @@
     android:orientation="vertical"
     android:background="@drawable/background_image">
 
-    <ImageView
+    <ImageButton
         android:id="@+id/imgBack2"
-        android:layout_width="32dp"
-        android:layout_height="32dp"
-        android:layout_margin="16dp"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="16dp"
+        android:layout_gravity="end"
+        android:background="?attr/selectableItemBackgroundBorderless"
         android:src="@drawable/ic_back"
-        android:clickable="true"
-        android:focusable="true"/>
-
+        android:contentDescription="Back to home"
+        android:scaleType="centerInside"/>
 
 
     <ListView

@@ -10,34 +10,47 @@
         android:orientation="vertical"
         android:padding="16dp">
 
-        <ImageView
+        <ImageButton
             android:id="@+id/imgBack1"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:layout_margin="16dp"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginEnd="16dp"
+            android:layout_gravity="end"
+            android:background="?attr/selectableItemBackgroundBorderless"
             android:src="@drawable/ic_back"
-            android:contentDescription="Back"
-            android:clickable="true"
-            android:focusable="true" />
+            android:contentDescription="Back to home"
+            android:scaleType="centerInside" />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Recipe name" />
+            android:text="Recipe name"
+            android:layout_marginTop="16dp" />
 
         <EditText
             android:id="@+id/etRecipeName"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:hint="Enter recipe name"
+            android:minHeight="48dp"
+            android:padding="12dp"
+            android:importantForAutofill="yes" />
+
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Ingredients"
             android:layout_marginTop="12dp" />
+
         <EditText
             android:id="@+id/etIngredients"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:hint="Enter ingredients"
+            android:minHeight="48dp"
+            android:padding="12dp"
+            android:importantForAutofill="yes" />
 
         <TextView
             android:layout_width="match_parent"
@@ -49,8 +62,11 @@
             android:id="@+id/etInstructions"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:minLines="3"
-            android:inputType="textMultiLine" />
+            android:hint="Enter instructions"
+            android:minHeight="72dp"
+            android:padding="12dp"
+            android:inputType="textMultiLine"
+            android:importantForAutofill="yes" />
 
         <Button
             android:id="@+id/btnChooseImage"
@@ -63,9 +79,10 @@
             android:id="@+id/imagePreview"
             android:layout_width="match_parent"
             android:layout_height="200dp"
-            android:visibility="gone"
+            android:layout_marginTop="8dp"
             android:scaleType="centerCrop"
-            android:layout_marginTop="8dp" />
+            android:visibility="gone"
+            android:contentDescription="Recipe image preview" />
 
         <Button
             android:id="@+id/btnSave"

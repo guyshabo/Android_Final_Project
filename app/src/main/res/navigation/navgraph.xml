@@ -93,7 +93,11 @@
         android:id="@+id/fragment_Recipe_Details"
         android:name="com.example.final_project.Fragment_Recipe_Details"
         android:label="fragment__recipe__details"
-        tools:layout="@layout/fragment__recipe__details" />
+        tools:layout="@layout/fragment__recipe__details" >
+        <action
+            android:id="@+id/action_fragment_Recipe_Details_to_fragment_Recipe_List"
+            app:destination="@id/fragment_Recipe_List" />
+    </fragment>
     <fragment
         android:id="@+id/fragment_Recipe_List"
         android:name="com.example.final_project.Fragment_Recipe_List"

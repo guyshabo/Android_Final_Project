@@ -1,21 +1,26 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="@drawable/background_image">
 
-    <ImageView
+    <ImageButton
         android:id="@+id/imgBack3"
-        android:layout_width="32dp"
-        android:layout_height="32dp"
-        android:layout_margin="16dp"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="16dp"
+        android:layout_gravity="end"
+        android:background="?attr/selectableItemBackgroundBorderless"
         android:src="@drawable/ic_back"
-        android:contentDescription="Back"
-        android:clickable="true"
-        android:focusable="true" />
+        android:contentDescription="Back to home"
+        android:scaleType="centerInside" />
 
     <ListView
         android:id="@+id/listViewFavorites"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
+
 </LinearLayout>

@@ -8,9 +8,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 
-import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
 
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -28,7 +26,6 @@ public class Fragment_Recipe_List extends Fragment {
                              Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment__recipe__list, container, false);
-
         ImageView imgBack2 = view.findViewById(R.id.imgBack2);
         ListView listView = view.findViewById(R.id.listViewRecipes);
 
@@ -38,13 +35,10 @@ public class Fragment_Recipe_List extends Fragment {
                 recipeNames
         );
         listView.setAdapter(adapter);
-
         imgBack2.setOnClickListener(v ->
-                Navigation.findNavController(v)
+                NavHostFragment.findNavController(Fragment_Recipe_List.this)
                         .navigate(R.id.action_fragment_Recipe_List_to_fragment_Home_Page)
         );
-
-
 
         FirebaseFirestore.getInstance()
                 .collection("recipes")
@@ -67,6 +61,7 @@ public class Fragment_Recipe_List extends Fragment {
             NavHostFragment.findNavController(this)
                     .navigate(R.id.action_fragment_Recipe_List_to_fragment_Recipe_Details, bundle);
         });
+
 
         return view;
     }

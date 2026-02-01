@@ -16,8 +16,11 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -84,13 +87,30 @@ public class MainActivity extends AppCompatActivity {
     public void getAllRecipes(ValueEventListener listener) {
         recipesRef.addListenerForSingleValueEvent(listener);
     }
-    public void addToFavorites(String recipeId) {
-        DatabaseReference ref = FirebaseDatabase.getInstance()
-                .getReference("recipes")
-                .child(recipeId)
-                .child("favorite");
+    public void addToFavorites(String recipeName) {
+        DatabaseReference favoritesRef =
+                FirebaseDatabase.getInstance().getReference("favorites");
 
-        ref.setValue(true);
+        favoritesRef.child(recipeName)
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        if (snapshot.exists()) {
+                            Toast.makeText(MainActivity.this,
+                                    "Recipe already in favorites",
+                                    Toast.LENGTH_SHORT).show();
+                        } else {
+                            favoritesRef.child(recipeName).setValue(recipeName);
+                            Toast.makeText(MainActivity.this,
+                                    "Added to favorites",
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+                    }
+                });
     }
 
 

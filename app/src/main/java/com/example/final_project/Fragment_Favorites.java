@@ -11,6 +11,9 @@ import android.widget.ListView;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+
 import java.util.ArrayList;
 
 public class Fragment_Favorites extends Fragment {
@@ -40,14 +43,20 @@ public class Fragment_Favorites extends Fragment {
         );
 
 
-        MainActivity mainActivity = (MainActivity) getActivity();
-        if (mainActivity != null) {
-            mainActivity.getFavoritesNames(favorites -> {
-                favoritesList.clear();
-                favoritesList.addAll(favorites);
-                adapter.notifyDataSetChanged();
-            });
-        }
+        FirebaseFirestore.getInstance()
+                .collection("favorites")
+                .get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    favoritesList.clear();
+                    for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
+                        String name = doc.getString("name");
+                        if (name != null) {
+                            favoritesList.add(name);
+                        }
+                    }
+                    adapter.notifyDataSetChanged();
+                });
+
 
         return view;
     }
