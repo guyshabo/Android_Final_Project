@@ -40,9 +40,9 @@
         <EditText
             android:id="@+id/username"
             android:layout_width="match_parent"
-            android:layout_height="107dp"
-            android:layout_weight="1"/>
-
+            android:layout_height="48dp"
+            android:hint="Enter username here"
+            android:inputType="text" />
         <TextView
             android:id="@+id/passwordTV"
             android:layout_width="match_parent"
@@ -52,8 +52,9 @@
         <EditText
             android:id="@+id/password"
             android:layout_width="match_parent"
-            android:layout_height="107dp"
-            android:layout_weight="1" />
+            android:layout_height="48dp"
+            android:hint="Enter password here"
+            android:inputType="text" />
     </LinearLayout>
 
     <LinearLayout

@@ -2,32 +2,37 @@ package com.example.final_project;
 
 public class Recipe {
 
-    private String name;
-    private String instructions;
-    private String imageUrl; // null אם אין תמונה
-    private boolean favorite;
+    public String id;          // Firebase
+    public String name;
+    public String ingredients;
+    public String instructions;
+    public String imageUrl;
+    public boolean favorite;
 
     // חובה ל‑Firebase
     public Recipe() {}
 
-    // מתכון רגיל (טקסט)
-    public Recipe(String name, String instructions, boolean favorite) {
+    // בלי תמונה
+    public Recipe(String name, String ingredients, String instructions) {
         this.name = name;
+        this.ingredients = ingredients;
         this.instructions = instructions;
-        this.favorite = favorite;
         this.imageUrl = null;
-    }
-
-    // מתכון מתמונה
-    public Recipe(String name, String imageUrl) {
-        this.name = name;
-        this.imageUrl = imageUrl;
-        this.instructions = "";
         this.favorite = false;
     }
 
-    // getters & setters
+    // עם תמונה
+    public Recipe(String name, String ingredients, String instructions, String imageUrl) {
+        this.name = name;
+        this.ingredients = ingredients;
+        this.instructions = instructions;
+        this.imageUrl = imageUrl;
+        this.favorite = false;
+    }
+
+    // getters
     public String getName() { return name; }
+    public String getIngredients() { return ingredients; }
     public String getInstructions() { return instructions; }
     public String getImageUrl() { return imageUrl; }
     public boolean isFavorite() { return favorite; }

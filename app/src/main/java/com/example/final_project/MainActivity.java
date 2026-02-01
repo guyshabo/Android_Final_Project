@@ -9,8 +9,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -19,80 +17,97 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
+
 public class MainActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
-
+    private DatabaseReference recipesRef;
+    public interface FavoritesCallback {
+        void onResult(ArrayList<String> favorites);
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         mAuth = FirebaseAuth.getInstance();
+        recipesRef = FirebaseDatabase.getInstance().getReference("recipes");
     }
 
     public void login() {
         EditText emailEt = findViewById(R.id.username);
         EditText passEt = findViewById(R.id.password);
 
-        String email = emailEt.getText().toString().trim();
-        String password = passEt.getText().toString().trim();
+        String email = emailEt.getText().toString();
+        String password = passEt.getText().toString();
 
         mAuth.signInWithEmailAndPassword(email, password)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            Toast.makeText(MainActivity.this, "Login Successful", Toast.LENGTH_SHORT).show();
-                            NavController navController =
-                                    Navigation.findNavController(MainActivity.this, R.id.fragmentContainerView);
-                            navController.navigate(R.id.action_fragment_Login_Page_to_fragment_Home_Page);
-                        } else {
-                            Toast.makeText(MainActivity.this, "Login Failed", Toast.LENGTH_SHORT).show();
-                        }
+                .addOnCompleteListener(this, task -> {
+                    if (task.isSuccessful()) {
+                        Toast.makeText(this, "Login Successful", Toast.LENGTH_SHORT).show();
+                        NavController navController =
+                                Navigation.findNavController(this, R.id.fragmentContainerView);
+                        navController.navigate(R.id.action_fragment_Login_Page_to_fragment_Home_Page);
+                    } else {
+                        Toast.makeText(this, "Login Failed", Toast.LENGTH_SHORT).show();
                     }
                 });
     }
 
-
     public void register(String email, String password) {
-
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, task -> {
-
                     if (task.isSuccessful()) {
-                        Toast.makeText(MainActivity.this, "Register Successful", Toast.LENGTH_SHORT).show();
-
+                        Toast.makeText(this, "Register Successful", Toast.LENGTH_SHORT).show();
                         writeToDB(email);
 
                         NavController navController =
-                                Navigation.findNavController(MainActivity.this, R.id.fragmentContainerView);
-
+                                Navigation.findNavController(this, R.id.fragmentContainerView);
                         navController.navigate(R.id.action_fragment_Register_to_fragment_Main_Page);
-
                     } else {
-                        Toast.makeText(MainActivity.this, "Register Failed", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, "Register Failed", Toast.LENGTH_SHORT).show();
                     }
-
                 });
     }
 
-
-
     private void writeToDB(String email) {
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference ref = database.getReference("users").child(email.replace(".", "_"));
+        DatabaseReference ref =
+                FirebaseDatabase.getInstance()
+                        .getReference("users")
+                        .child(email.replace(".", "_"));
+
         User user = new User(email);
         ref.setValue(user);
     }
 
-    public void readDB(String email) {
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference ref = database.getReference("users").child(email.replace(".", "_"));
+    public void getAllRecipes(ValueEventListener listener) {
+        recipesRef.addListenerForSingleValueEvent(listener);
+    }
+    public void addToFavorites(String recipeId) {
+        DatabaseReference ref = FirebaseDatabase.getInstance()
+                .getReference("recipes")
+                .child(recipeId)
+                .child("favorite");
 
-        ref.addValueEventListener(new ValueEventListener() {
+        ref.setValue(true);
+    }
+
+
+    public void getFavoritesNames(MainActivity.FavoritesCallback callback) {
+        ArrayList<String> favorites = new ArrayList<>();
+
+        DatabaseReference ref = FirebaseDatabase.getInstance()
+                .getReference("favorites");
+
+        ref.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                User user = snapshot.getValue(User.class);
+                for (DataSnapshot child : snapshot.getChildren()) {
+                    String name = child.getValue(String.class);
+                    favorites.add(name);
+                }
+                callback.onResult(favorites);
             }
 
             @Override
@@ -100,4 +115,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+
+
+
 }

@@ -49,6 +49,12 @@
         <action
             android:id="@+id/action_fragment_Favorites_to_fragment_Recipe_Details"
             app:destination="@id/fragment_Recipe_Details" />
+        <action
+            android:id="@+id/action_fragment_Favorites_to_fragment_Home_Page"
+            app:destination="@id/fragment_Home_Page" />
+        <action
+            android:id="@+id/action_fragment_Favorites_to_fragment_Main_Page"
+            app:destination="@id/fragment_Main_Page" />
     </fragment>
     <fragment
         android:id="@+id/fragment_Home_Page"
@@ -75,7 +81,14 @@
         android:id="@+id/fragment_Search"
         android:name="com.example.final_project.Fragment_Search"
         android:label="fragment__search"
-        tools:layout="@layout/fragment__search" />
+        tools:layout="@layout/fragment__search" >
+        <action
+            android:id="@+id/action_fragment_Search_to_fragment_Home_Page"
+            app:destination="@id/fragment_Home_Page" />
+        <action
+            android:id="@+id/action_fragment_Search_to_fragment_Recipe_Details"
+            app:destination="@id/fragment_Recipe_Details" />
+    </fragment>
     <fragment
         android:id="@+id/fragment_Recipe_Details"
         android:name="com.example.final_project.Fragment_Recipe_Details"
@@ -89,6 +102,9 @@
         <action
             android:id="@+id/action_fragment_Recipe_List_to_fragment_Recipe_Details"
             app:destination="@id/fragment_Recipe_Details" />
+        <action
+            android:id="@+id/action_fragment_Recipe_List_to_fragment_Home_Page"
+            app:destination="@id/fragment_Home_Page" />
     </fragment>
     <fragment
         android:id="@+id/fragment_Login_Page"
