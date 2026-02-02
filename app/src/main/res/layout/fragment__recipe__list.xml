@@ -18,6 +18,7 @@
         android:scaleType="centerInside"/>
 
 
+
     <ListView
         android:id="@+id/listViewRecipes"
         android:layout_width="match_parent"

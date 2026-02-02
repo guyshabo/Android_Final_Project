@@ -97,6 +97,9 @@
         <action
             android:id="@+id/action_fragment_Recipe_Details_to_fragment_Recipe_List"
             app:destination="@id/fragment_Recipe_List" />
+        <action
+            android:id="@+id/action_fragment_Recipe_Details_to_fragment_Search"
+            app:destination="@id/fragment_Search" />
     </fragment>
     <fragment
         android:id="@+id/fragment_Recipe_List"

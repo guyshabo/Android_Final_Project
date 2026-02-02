@@ -42,8 +42,13 @@ public class MainActivity extends AppCompatActivity {
         EditText emailEt = findViewById(R.id.username);
         EditText passEt = findViewById(R.id.password);
 
-        String email = emailEt.getText().toString();
-        String password = passEt.getText().toString();
+        String email = emailEt.getText().toString().trim();
+        String password = passEt.getText().toString().trim();
+
+        if (email.isEmpty() || password.isEmpty()) {
+            Toast.makeText(this, "Please fill in all fields", Toast.LENGTH_SHORT).show();
+            return;
+        }
 
         mAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, task -> {
@@ -58,13 +63,19 @@ public class MainActivity extends AppCompatActivity {
                 });
     }
 
+
     public void register(String email, String password) {
+
+        if (email.isEmpty() || password.isEmpty()) {
+            Toast.makeText(this, "Please fill in all fields", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, task -> {
                     if (task.isSuccessful()) {
                         Toast.makeText(this, "Register Successful", Toast.LENGTH_SHORT).show();
                         writeToDB(email);
-
                         NavController navController =
                                 Navigation.findNavController(this, R.id.fragmentContainerView);
                         navController.navigate(R.id.action_fragment_Register_to_fragment_Main_Page);
@@ -73,6 +84,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
     }
+
 
     private void writeToDB(String email) {
         DatabaseReference ref =

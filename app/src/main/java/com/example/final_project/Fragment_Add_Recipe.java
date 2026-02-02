@@ -4,18 +4,16 @@ import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.Toast;
+import android.view.*;
+import android.widget.*;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class Fragment_Add_Recipe extends Fragment {
 
@@ -35,12 +33,13 @@ public class Fragment_Add_Recipe extends Fragment {
         ImageView imgBack1 = view.findViewById(R.id.imgBack1);
         imagePreview = view.findViewById(R.id.imagePreview);
 
-        DatabaseReference recipesRef =
-                FirebaseDatabase.getInstance().getReference("recipes");
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
         imgBack1.setOnClickListener(v ->
                 Navigation.findNavController(v)
-                        .navigate(R.id.action_fragment_Add_Recipe_to_fragment_Home_Page));
+                        .navigate(R.id.action_fragment_Add_Recipe_to_fragment_Home_Page)
+        );
 
         btnChooseImage.setOnClickListener(v -> {
             Intent intent = new Intent(Intent.ACTION_PICK);
@@ -49,27 +48,45 @@ public class Fragment_Add_Recipe extends Fragment {
         });
 
         btnSave.setOnClickListener(v -> {
-            String name = etName.getText().toString();
-            String ingredients = etIngredients.getText().toString();
-            String instructions = etInstructions.getText().toString();
+            String name = etName.getText().toString().trim();
+            String ingredients = etIngredients.getText().toString().trim();
+            String instructions = etInstructions.getText().toString().trim();
 
             if (name.isEmpty() || ingredients.isEmpty()) {
-                Toast.makeText(getContext(), "Name And Ingredients Are Required.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Name and ingredients are required", Toast.LENGTH_SHORT).show();
                 return;
             }
 
-            Recipe recipe;
-            if (imageUri != null) {
-                recipe = new Recipe(name, ingredients, instructions, imageUri.toString());
-            } else {
-                recipe = new Recipe(name, ingredients, instructions);
-            }
+            // בדיקה אם קיים מתכון בשם זהה לאותו משתמש
+            db.collection("recipes")
+                    .whereEqualTo("userId", uid)
+                    .whereEqualTo("name", name)
+                    .get()
+                    .addOnSuccessListener(qs -> {
+                        if (!qs.isEmpty()) {
+                            Toast.makeText(getContext(),
+                                    "You already have a recipe with this name",
+                                    Toast.LENGTH_SHORT).show();
+                            return;
+                        }
 
-            String id = recipesRef.push().getKey();
-            recipe.id = id;
-            recipesRef.child(id).setValue(recipe);
+                        Map<String, Object> recipe = new HashMap<>();
+                        recipe.put("name", name);
+                        recipe.put("ingredients", ingredients);
+                        recipe.put("instructions", instructions);
+                        recipe.put("userId", uid);
+                        if (imageUri != null) {
+                            recipe.put("imageUrl", imageUri.toString());
+                        }
 
-            Toast.makeText(getContext(), "Recipe Saved", Toast.LENGTH_SHORT).show();
+                        db.collection("recipes")
+                                .add(recipe)
+                                .addOnSuccessListener(doc -> {
+                                    Toast.makeText(getContext(), "Recipe saved", Toast.LENGTH_SHORT).show();
+                                    Navigation.findNavController(v)
+                                            .navigate(R.id.action_fragment_Add_Recipe_to_fragment_Home_Page);
+                                });
+                    });
         });
 
         return view;
