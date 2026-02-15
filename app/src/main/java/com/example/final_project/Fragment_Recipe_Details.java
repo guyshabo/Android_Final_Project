@@ -8,17 +8,21 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
 
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-
-import java.util.HashMap;
-import java.util.Map;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 public class Fragment_Recipe_Details extends Fragment {
+
+    private DatabaseReference mDatabase;
+    private String uid;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -37,95 +41,88 @@ public class Fragment_Recipe_Details extends Fragment {
                 NavHostFragment.findNavController(this).popBackStack()
         );
 
-
-
         Bundle bundle = getArguments();
         if (bundle == null) return view;
 
         String recipeName = bundle.getString("name");
         txtName.setText(recipeName);
 
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        // אתחול ה-Database עם הכתובת שלך
+        mDatabase = FirebaseDatabase.getInstance("https://finalproject-d22b8-default-rtdb.firebaseio.com/").getReference();
+        uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
-        db.collection("recipes")
-                .whereEqualTo("name", recipeName)
-                .whereEqualTo("userId", uid)
-                .get()
-                .addOnSuccessListener(qs -> {
-                    for (QueryDocumentSnapshot doc : qs) {
-                        String ingredients = doc.getString("ingredients");
-                        String instructions = doc.getString("instructions");
-
-                        String text = "";
-
-                        if (ingredients != null && !ingredients.isEmpty()) {
-                            text += "Ingredients:\n" + ingredients + "\n\n";
+        // 1. שליפת פרטי המתכון מה-Realtime Database
+        mDatabase.child("recipes").orderByChild("name").equalTo(recipeName)
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        for (DataSnapshot doc : snapshot.getChildren()) {
+                            Recipe recipe = doc.getValue(Recipe.class);
+                            if (recipe != null && recipe.userId.equals(uid)) {
+                                String text = "";
+                                if (recipe.ingredients != null && !recipe.ingredients.isEmpty()) {
+                                    text += "Ingredients:\n" + recipe.ingredients + "\n\n";
+                                }
+                                if (recipe.instructions != null && !recipe.instructions.isEmpty()) {
+                                    text += "Instructions:\n" + recipe.instructions;
+                                }
+                                txtInstructions.setText(text);
+                                break;
+                            }
                         }
-
-                        if (instructions != null && !instructions.isEmpty()) {
-                            text += "Instructions:\n" + instructions;
-                        }
-
-                        txtInstructions.setText(text);
-                        break;
                     }
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {}
                 });
 
-        db.collection("favorites")
-                .whereEqualTo("name", recipeName)
-                .whereEqualTo("userId", uid)
-                .get()
-                .addOnSuccessListener(qs -> {
-                    if (qs.isEmpty()) {
-                        btnFavorite.setVisibility(View.VISIBLE);
-                        btnRemoveFavorite.setVisibility(View.GONE);
-                    } else {
-                        btnFavorite.setVisibility(View.GONE);
-                        btnRemoveFavorite.setVisibility(View.VISIBLE);
-                    }
-                });
+        // 2. בדיקה אם המתכון במועדפים (לפי UID של המשתמש)
+        DatabaseReference favRef = mDatabase.child("favorites").child(uid).child(recipeName);
+        favRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+                    btnFavorite.setVisibility(View.GONE);
+                    btnRemoveFavorite.setVisibility(View.VISIBLE);
+                } else {
+                    btnFavorite.setVisibility(View.VISIBLE);
+                    btnRemoveFavorite.setVisibility(View.GONE);
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {}
+        });
 
+        // 3. הוספה למועדפים
         btnFavorite.setOnClickListener(v -> {
-            Map<String, Object> fav = new HashMap<>();
-            fav.put("name", recipeName);
-            fav.put("userId", uid);
-
-            db.collection("favorites")
-                    .add(fav)
-                    .addOnSuccessListener(d -> {
-                        btnFavorite.setVisibility(View.GONE);
-                        btnRemoveFavorite.setVisibility(View.VISIBLE);
-                        Toast.makeText(getContext(), "Added to favorites", Toast.LENGTH_SHORT).show();
-                    });
+            favRef.setValue(true).addOnSuccessListener(aVoid -> {
+                Toast.makeText(getContext(), "Added to favorites", Toast.LENGTH_SHORT).show();
+            });
         });
 
+        // 4. הסרה מהמועדפים
         btnRemoveFavorite.setOnClickListener(v -> {
-            db.collection("favorites")
-                    .whereEqualTo("name", recipeName)
-                    .whereEqualTo("userId", uid)
-                    .get()
-                    .addOnSuccessListener(qs -> {
-                        for (QueryDocumentSnapshot doc : qs) {
-                            doc.getReference().delete();
-                        }
-                        btnRemoveFavorite.setVisibility(View.GONE);
-                        btnFavorite.setVisibility(View.VISIBLE);
-                        Toast.makeText(getContext(), "Removed from favorites", Toast.LENGTH_SHORT).show();
-                    });
+            favRef.removeValue().addOnSuccessListener(aVoid -> {
+                Toast.makeText(getContext(), "Removed from favorites", Toast.LENGTH_SHORT).show();
+            });
         });
 
+        // 5. מחיקת מתכון
         btnDeleteRecipe.setOnClickListener(v -> {
-            db.collection("recipes")
-                    .whereEqualTo("name", recipeName)
-                    .whereEqualTo("userId", uid)
-                    .get()
-                    .addOnSuccessListener(qs -> {
-                        for (QueryDocumentSnapshot doc : qs) {
-                            doc.getReference().delete();
+            mDatabase.child("recipes").orderByChild("name").equalTo(recipeName)
+                    .addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            for (DataSnapshot doc : snapshot.getChildren()) {
+                                Recipe r = doc.getValue(Recipe.class);
+                                if (r != null && r.userId.equals(uid)) {
+                                    doc.getRef().removeValue(); // מחיקה מה-DB
+                                }
+                            }
+                            Toast.makeText(getContext(), "Recipe deleted", Toast.LENGTH_SHORT).show();
+                            NavHostFragment.findNavController(Fragment_Recipe_Details.this).navigateUp();
                         }
-                        Toast.makeText(getContext(), "Recipe deleted", Toast.LENGTH_SHORT).show();
-                        NavHostFragment.findNavController(this).navigateUp();
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {}
                     });
         });
 

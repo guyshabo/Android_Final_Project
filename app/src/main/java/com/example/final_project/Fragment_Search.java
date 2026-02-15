@@ -7,9 +7,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.*;
+
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import java.util.ArrayList;
@@ -65,25 +72,26 @@ public class Fragment_Search extends Fragment {
         if (text.isEmpty()) return;
 
         results.clear();
-
         String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("recipes");
 
-        FirebaseFirestore.getInstance()
-                .collection("recipes")
-                .whereEqualTo("userId", userId)
-                .get()
-                .addOnSuccessListener(queryDocumentSnapshots -> {
-                    for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
-                        String name = doc.getString("name");
-                        String ingredients = doc.getString("ingredients");
-
-                        if ((name != null && name.toLowerCase().contains(text)) ||
-                                (ingredients != null && ingredients.toLowerCase().contains(text))) {
-                            results.add(name);
+        ref.orderByChild("userId").equalTo(userId).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot ds : snapshot.getChildren()) {
+                    Recipe r = ds.getValue(Recipe.class);
+                    if (r != null) {
+                        if (r.name.toLowerCase().contains(text) || r.ingredients.toLowerCase().contains(text)) {
+                            results.add(r.name);
                         }
                     }
-                    adapter.notifyDataSetChanged();
-                });
+                }
+                adapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {}
+        });
     }
 
 

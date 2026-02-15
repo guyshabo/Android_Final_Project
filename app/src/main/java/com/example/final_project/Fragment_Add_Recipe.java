@@ -4,27 +4,38 @@ import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.view.*;
-import android.widget.*;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.Toast;
+
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.FirebaseFirestore;
 
-import java.util.HashMap;
-import java.util.Map;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 public class Fragment_Add_Recipe extends Fragment {
 
     private static final int PICK_IMAGE_REQUEST = 1;
     private Uri imageUri;
     private ImageView imagePreview;
+    private DatabaseReference mDatabase;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment__add__recipe, container, false);
 
+        // אתחול רכיבי ממשק
         EditText etName = view.findViewById(R.id.etRecipeName);
         EditText etIngredients = view.findViewById(R.id.etIngredients);
         EditText etInstructions = view.findViewById(R.id.etInstructions);
@@ -33,12 +44,12 @@ public class Fragment_Add_Recipe extends Fragment {
         ImageView imgBack1 = view.findViewById(R.id.imgBack1);
         imagePreview = view.findViewById(R.id.imagePreview);
 
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        // אתחול Firebase Realtime Database
+        mDatabase = FirebaseDatabase.getInstance().getReference();
         String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
         imgBack1.setOnClickListener(v ->
-                Navigation.findNavController(v)
-                        .navigate(R.id.action_fragment_Add_Recipe_to_fragment_Home_Page)
+                Navigation.findNavController(v).navigate(R.id.action_fragment_Add_Recipe_to_fragment_Home_Page)
         );
 
         btnChooseImage.setOnClickListener(v -> {
@@ -53,39 +64,49 @@ public class Fragment_Add_Recipe extends Fragment {
             String instructions = etInstructions.getText().toString().trim();
 
             if (name.isEmpty() || ingredients.isEmpty()) {
-                Toast.makeText(getContext(), "Name and ingredients are required", Toast.LENGTH_SHORT).show();
+                Toast.makeText(requireContext(), "Name and ingredients are required", Toast.LENGTH_SHORT).show();
                 return;
             }
 
-            // בדיקה אם קיים מתכון בשם זהה לאותו משתמש
-            db.collection("recipes")
-                    .whereEqualTo("userId", uid)
-                    .whereEqualTo("name", name)
-                    .get()
-                    .addOnSuccessListener(qs -> {
-                        if (!qs.isEmpty()) {
-                            Toast.makeText(getContext(),
-                                    "You already have a recipe with this name",
-                                    Toast.LENGTH_SHORT).show();
-                            return;
+            // בדיקה אם קיים מתכון בשם זהה למשתמש זה
+            mDatabase.child("recipes").orderByChild("userId").equalTo(uid)
+                    .addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            boolean exists = false;
+                            for (DataSnapshot ds : snapshot.getChildren()) {
+                                Recipe r = ds.getValue(Recipe.class);
+                                if (r != null && r.name != null && r.name.equalsIgnoreCase(name)) {
+                                    exists = true;
+                                    break;
+                                }
+                            }
+
+                            if (exists) {
+                                Toast.makeText(requireContext(), "You already have a recipe with this name", Toast.LENGTH_SHORT).show();
+                            } else {
+                                // יצירת מפתח ייחודי ושמירה
+                                String recipeId = mDatabase.child("recipes").push().getKey();
+                                Recipe newRecipe = new Recipe(name, ingredients, instructions,
+                                        imageUri != null ? imageUri.toString() : "", uid);
+                                newRecipe.id = recipeId;
+
+                                if (recipeId != null) {
+                                    mDatabase.child("recipes").child(recipeId).setValue(newRecipe)
+                                            .addOnSuccessListener(aVoid -> {
+                                                Toast.makeText(requireContext(), "Recipe saved", Toast.LENGTH_SHORT).show();
+                                                Navigation.findNavController(v).navigate(R.id.action_fragment_Add_Recipe_to_fragment_Home_Page);
+                                            })
+                                            .addOnFailureListener(e ->
+                                                    Toast.makeText(requireContext(), "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show());
+                                }
+                            }
                         }
 
-                        Map<String, Object> recipe = new HashMap<>();
-                        recipe.put("name", name);
-                        recipe.put("ingredients", ingredients);
-                        recipe.put("instructions", instructions);
-                        recipe.put("userId", uid);
-                        if (imageUri != null) {
-                            recipe.put("imageUrl", imageUri.toString());
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+                            Toast.makeText(requireContext(), "Database error: " + error.getMessage(), Toast.LENGTH_SHORT).show();
                         }
-
-                        db.collection("recipes")
-                                .add(recipe)
-                                .addOnSuccessListener(doc -> {
-                                    Toast.makeText(getContext(), "Recipe saved", Toast.LENGTH_SHORT).show();
-                                    Navigation.findNavController(v)
-                                            .navigate(R.id.action_fragment_Add_Recipe_to_fragment_Home_Page);
-                                });
                     });
         });
 

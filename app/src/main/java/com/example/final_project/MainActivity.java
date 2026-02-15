@@ -35,8 +35,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         mAuth = FirebaseAuth.getInstance();
-        recipesRef = FirebaseDatabase.getInstance().getReference("recipes");
-    }
+        recipesRef = FirebaseDatabase.getInstance("https://finalproject-d22b8-default-rtdb.firebaseio.com/").getReference("recipes");    }
 
     public void login() {
         EditText emailEt = findViewById(R.id.username);
