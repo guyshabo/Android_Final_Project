@@ -35,7 +35,6 @@ public class Fragment_Add_Recipe extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment__add__recipe, container, false);
 
-        // אתחול רכיבי ממשק
         EditText etName = view.findViewById(R.id.etRecipeName);
         EditText etIngredients = view.findViewById(R.id.etIngredients);
         EditText etInstructions = view.findViewById(R.id.etInstructions);
@@ -44,7 +43,7 @@ public class Fragment_Add_Recipe extends Fragment {
         ImageView imgBack1 = view.findViewById(R.id.imgBack1);
         imagePreview = view.findViewById(R.id.imagePreview);
 
-        // אתחול Firebase Realtime Database
+
         mDatabase = FirebaseDatabase.getInstance().getReference();
         String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
@@ -68,7 +67,6 @@ public class Fragment_Add_Recipe extends Fragment {
                 return;
             }
 
-            // בדיקה אם קיים מתכון בשם זהה למשתמש זה
             mDatabase.child("recipes").orderByChild("userId").equalTo(uid)
                     .addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
@@ -85,7 +83,7 @@ public class Fragment_Add_Recipe extends Fragment {
                             if (exists) {
                                 Toast.makeText(requireContext(), "You already have a recipe with this name", Toast.LENGTH_SHORT).show();
                             } else {
-                                // יצירת מפתח ייחודי ושמירה
+
                                 String recipeId = mDatabase.child("recipes").push().getKey();
                                 Recipe newRecipe = new Recipe(name, ingredients, instructions,
                                         imageUri != null ? imageUri.toString() : "", uid);
